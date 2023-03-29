@@ -16,6 +16,7 @@ type UserCreateInput = {
 };
 
 type UserFindOneInput = {
+  id?: number;
   username?: string;
   email?: string;
 };
