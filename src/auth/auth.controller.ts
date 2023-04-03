@@ -26,8 +26,8 @@ export class AuthController {
   @UseGuards(LocalAuthGuard)
   @HttpCode(200)
   @Post('login')
-  async login(@Req() req: Request) {
-    return new UserEntity(req.user as UserEntity);
+  login() {
+    return 'OK';
   }
 
   @PublicRoute()
@@ -35,5 +35,11 @@ export class AuthController {
   @Post('register')
   async register(@Body() createUserDto: CreateUserDto): Promise<UserEntity> {
     return new UserEntity(await this.usersService.create(createUserDto));
+  }
+
+  @Post('status')
+  @HttpCode(200)
+  status(@Req() req: Request) {
+    return new UserEntity(req.user as UserEntity);
   }
 }
