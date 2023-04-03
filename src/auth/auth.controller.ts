@@ -3,6 +3,7 @@ import {
   ClassSerializerInterceptor,
   Controller,
   HttpCode,
+  Inject,
   Post,
   Req,
   UseGuards,
@@ -11,13 +12,14 @@ import {
 import { Request } from 'express';
 import { LocalAuthGuard } from './utils/local-auth.guard';
 import { CreateUserDto } from './dto/create-user.dto';
-import { UsersService } from 'src/users/users.service';
 import { UserEntity } from './entities/user.entity';
 import { PublicRoute } from 'src/utils/public-route';
+import { SERVICES } from 'src/utils/constants/app';
+import { IUsersService } from 'src/users/interfaces/users-service.interface';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private usersService: UsersService) {}
+  constructor(@Inject(SERVICES.USERS) private usersService: IUsersService) {}
 
   @PublicRoute()
   @UseInterceptors(ClassSerializerInterceptor)

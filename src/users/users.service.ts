@@ -1,28 +1,11 @@
 import { ConflictException, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { hashPassword } from 'src/utils/helpers';
-
-type User = {
-  id: number;
-  username: string;
-  password: string;
-  email: string;
-};
-
-type UserCreateInput = {
-  username: string;
-  password: string;
-  email: string;
-};
-
-type UserFindOneInput = {
-  id?: number;
-  username?: string;
-  email?: string;
-};
+import { User, UserCreateInput, UserFindOneInput } from './types';
+import { IUsersService } from './interfaces/users-service.interface';
 
 @Injectable()
-export class UsersService {
+export class UsersService implements IUsersService {
   constructor(private prisma: PrismaService) {}
 
   async findOne(inputWhere: UserFindOneInput): Promise<User | null> {
