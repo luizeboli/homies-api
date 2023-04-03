@@ -5,17 +5,16 @@ import {
   HttpCode,
   Inject,
   Post,
-  Req,
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
-import { Request } from 'express';
 import { LocalAuthGuard } from './utils/local-auth.guard';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UserEntity } from './entities/user.entity';
 import { PublicRoute } from 'src/utils/public-route';
 import { SERVICES } from 'src/utils/constants/app';
 import { IUsersService } from 'src/users/interfaces/users-service.interface';
+import { AuthUser } from 'src/utils/decorators/auth-user.decorator';
 
 @Controller('auth')
 export class AuthController {
@@ -39,7 +38,7 @@ export class AuthController {
 
   @Post('status')
   @HttpCode(200)
-  status(@Req() req: Request) {
-    return new UserEntity(req.user as UserEntity);
+  status(@AuthUser() user: UserEntity) {
+    return new UserEntity(user);
   }
 }
