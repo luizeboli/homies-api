@@ -1,12 +1,12 @@
 export type User = {
-  id: number;
+  id: string;
   username: string;
   password: string;
   email: string;
 };
 
 export type UserFindOneInput = {
-  id?: number;
+  id?: string;
   username?: string;
   email?: string;
 };
