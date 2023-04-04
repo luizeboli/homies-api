@@ -1,7 +1,9 @@
 import { IsEmail, IsNotEmpty } from 'class-validator';
+import { UserFieldAvailable } from 'src/utils/validators/user-field-available';
 
 export class CreateUserDto {
   @IsNotEmpty()
+  @UserFieldAvailable({ message: 'Username already taken' })
   username: string;
 
   @IsNotEmpty()
@@ -9,5 +11,6 @@ export class CreateUserDto {
 
   @IsNotEmpty()
   @IsEmail()
+  @UserFieldAvailable({ message: 'Email already taken' })
   email: string;
 }

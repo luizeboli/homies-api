@@ -1,4 +1,4 @@
-import { ConflictException, Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { hashPassword } from 'src/utils/helpers';
 import { User, UserCreateInput, UserFindOneInput } from './types';
 import { IUsersService } from './interfaces/users-service.interface';
@@ -17,15 +17,6 @@ export class UsersService implements IUsersService {
   }
 
   async create(user: UserCreateInput): Promise<User> {
-    const { username, email } = user;
-    const existingUsername = await this.usersRepository.findOne({ username });
-    const existingEmail = await this.usersRepository.findOne({ email });
-
-    if (existingUsername)
-      throw new ConflictException('Username already exists');
-
-    if (existingEmail) throw new ConflictException('Email already exists');
-
     const password = await hashPassword(user.password);
     const createdUser = this.usersRepository.create({
       ...user,

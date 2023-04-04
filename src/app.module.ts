@@ -6,12 +6,14 @@ import { APP_GUARD } from '@nestjs/core';
 import { AuthenticatedGuard } from './auth/utils/authenticated.guard';
 import { ConversationsModule } from './conversations/conversations.module';
 import { IsExistingUser } from './utils/validators/user-exists';
+import { IsUserFieldAvailable } from './utils/validators/user-field-available';
 
 @Module({
   imports: [PrismaModule, UsersModule, AuthModule, ConversationsModule],
   providers: [
     { provide: APP_GUARD, useClass: AuthenticatedGuard },
     IsExistingUser,
+    IsUserFieldAvailable,
   ],
 })
 export class AppModule {}
