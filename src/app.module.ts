@@ -5,9 +5,13 @@ import { PrismaModule } from './prisma/prisma.module';
 import { APP_GUARD } from '@nestjs/core';
 import { AuthenticatedGuard } from './auth/utils/authenticated.guard';
 import { ConversationsModule } from './conversations/conversations.module';
+import { IsExistingUser } from './utils/validators/user-exists';
 
 @Module({
   imports: [PrismaModule, UsersModule, AuthModule, ConversationsModule],
-  providers: [{ provide: APP_GUARD, useClass: AuthenticatedGuard }],
+  providers: [
+    { provide: APP_GUARD, useClass: AuthenticatedGuard },
+    IsExistingUser,
+  ],
 })
 export class AppModule {}

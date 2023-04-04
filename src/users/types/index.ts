@@ -5,6 +5,10 @@ export type User = {
   email: string;
 };
 
+export type UserFindManyInput = {
+  ids?: string[];
+};
+
 export type UserFindOneInput = {
   id?: string;
   username?: string;
