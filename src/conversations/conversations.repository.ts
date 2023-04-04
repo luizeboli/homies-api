@@ -13,14 +13,14 @@ export class ConversationsRepository implements IConversationsRepository {
   constructor(private readonly prisma: PrismaService) {}
 
   async create(data: ConversationCreateInput): Promise<Conversation> {
-    const { ownerId, userIds } = data;
+    const { ownerId, usersIds } = data;
     return this.prisma.conversation.create({
       data: {
         ownerId,
         users: {
           connect: [
             { id: ownerId },
-            ...userIds.map((userId) => ({ id: userId })),
+            ...usersIds.map((userId) => ({ id: userId })),
           ],
         },
       },

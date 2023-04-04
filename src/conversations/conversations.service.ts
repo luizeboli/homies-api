@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { IConversationsService } from './interfaces/conversations-service.interface';
 import { Conversation, ConversationCreateInput } from './types';
 import { REPOSITORIES } from 'src/utils/constants/app';
@@ -12,6 +12,14 @@ export class ConversationsService implements IConversationsService {
   ) {}
 
   create(data: ConversationCreateInput): Promise<Conversation> {
+    const sameUserId = data.usersIds.some((id) => id === data.ownerId);
+    if (sameUserId) {
+      throw new HttpException(
+        'You cannot add yourself to the conversation',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
     return this.conversationsRepository.create(data);
   }
 

@@ -13,5 +13,5 @@ export type ConversationFindManyInput = {
 
 export type ConversationCreateInput = {
   ownerId: string;
-  userIds: string[];
+  usersIds: string[];
 };

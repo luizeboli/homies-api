@@ -4,5 +4,5 @@ export class CreateConversationDto {
   @IsNotEmpty()
   @IsArray()
   @IsString({ each: true })
-  userIds: string[];
+  usersIds: string[];
 }

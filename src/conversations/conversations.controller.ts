@@ -19,7 +19,7 @@ export class ConversationsController {
 
   @Post()
   create(@AuthUser() user: User, @Body() body: CreateConversationDto) {
-    const { userIds } = body;
-    return this.conversationsService.create({ ownerId: user.id, userIds });
+    const { usersIds } = body;
+    return this.conversationsService.create({ ownerId: user.id, usersIds });
   }
 }
