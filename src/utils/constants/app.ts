@@ -1,10 +1,12 @@
 export enum SERVICES {
   AUTH = 'AuthService',
   USERS = 'UsersService',
+  CONVERSATIONS = 'ConversationsService',
 }
 
 export enum REPOSITORIES {
   USERS = 'UsersRepository',
+  CONVERSATIONS = 'ConversationsRepository',
 }
 
 export const ROUTES = {
@@ -13,5 +15,8 @@ export const ROUTES = {
     LOGIN: 'login',
     REGISTER: 'register',
     STATUS: 'status',
+  },
+  CONVERSATIONS: {
+    INDEX: 'conversations',
   },
 } as const;
