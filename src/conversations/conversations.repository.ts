@@ -1,3 +1,4 @@
+import { Prisma } from '@prisma/client';
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { IConversationsRepository } from './interfaces/conversations-repository.interface';
@@ -29,7 +30,30 @@ export class ConversationsRepository implements IConversationsRepository {
     });
   }
 
-  findMany(where: ConversationFindManyInput = {}): Promise<Conversation[]> {
+  private formatConversationsFindManyWhere(
+    rawWhere: ConversationFindManyInput,
+  ) {
+    const { ownerId, userId } = rawWhere;
+    const where: Prisma.ConversationWhereInput = {};
+
+    if (ownerId) {
+      where.ownerId = ownerId;
+    }
+
+    if (userId) {
+      where.users = {
+        some: {
+          id: userId,
+        },
+      };
+    }
+
+    return where;
+  }
+
+  findMany(rawWhere: ConversationFindManyInput = {}): Promise<Conversation[]> {
+    const where = this.formatConversationsFindManyWhere(rawWhere);
+
     return this.prisma.conversation.findMany({
       where,
       include: {

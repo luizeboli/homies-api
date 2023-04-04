@@ -16,7 +16,7 @@ export class ConversationsService implements IConversationsService {
   }
 
   getConversations(userId: string): Promise<Conversation[]> {
-    return this.conversationsRepository.findMany({ ownerId: userId });
+    return this.conversationsRepository.findMany({ userId });
   }
 
   delete(id: string): void {

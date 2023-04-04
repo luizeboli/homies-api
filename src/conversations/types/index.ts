@@ -8,6 +8,7 @@ export type Conversation = {
 
 export type ConversationFindManyInput = {
   ownerId?: string;
+  userId?: string;
 };
 
 export type ConversationCreateInput = {
