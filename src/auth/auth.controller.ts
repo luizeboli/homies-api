@@ -36,6 +36,7 @@ export class AuthController {
     return new UserEntity(await this.usersService.create(createUserDto));
   }
 
+  @UseInterceptors(ClassSerializerInterceptor)
   @Post(ROUTES.AUTH.STATUS)
   @HttpCode(200)
   status(@AuthUser() user: UserEntity) {
