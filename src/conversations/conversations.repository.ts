@@ -34,7 +34,6 @@ export class ConversationsRepository implements IConversationsRepository {
       where,
       include: {
         users: true,
-        owner: true,
       },
     });
   }
