@@ -9,7 +9,7 @@ export class AuthService implements IAuthService {
   constructor(@Inject(SERVICES.USERS) private usersService: IUsersService) {}
 
   async validateUser(username: string, pass: string): Promise<any> {
-    const user = await this.usersService.findOne({ username });
+    const user = await this.usersService.findUser({ username });
     if (!user) return null;
 
     const isSamePassword = await comparePasswordHash(pass, user.password);
