@@ -17,8 +17,8 @@ async function bootstrap() {
 
   app.use(
     session({
-      name: process.env.COOKIE_NAME as string,
-      secret: process.env.COOKIE_SECRET as string,
+      name: process.env.COOKIE_NAME,
+      secret: process.env.COOKIE_SECRET,
       resave: false,
       saveUninitialized: false,
       cookie: {
@@ -33,6 +33,6 @@ async function bootstrap() {
   );
   app.use(passport.session());
 
-  await app.listen(3000);
+  await app.listen(process.env.PORT);
 }
 bootstrap();
