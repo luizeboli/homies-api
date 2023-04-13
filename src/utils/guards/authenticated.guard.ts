@@ -1,6 +1,7 @@
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { IS_PUBLIC_ROUTE_KEY } from 'src/utils/public-route';
+import { IS_PUBLIC_ROUTE_KEY } from 'src/utils/decorators/public-route';
+import { WithAuthProp } from '@clerk/clerk-sdk-node';
 
 @Injectable()
 export class AuthenticatedGuard implements CanActivate {
@@ -14,7 +15,12 @@ export class AuthenticatedGuard implements CanActivate {
 
     if (isPublicRoute) return true;
 
-    const request = context.switchToHttp().getRequest();
-    return request.isAuthenticated();
+    const request = context.switchToHttp().getRequest<WithAuthProp<Request>>();
+    if (request.method === 'OPTIONS') return true;
+
+    const authFromClerk = request.auth;
+    if (!!authFromClerk.userId) return true;
+
+    return false;
   }
 }
