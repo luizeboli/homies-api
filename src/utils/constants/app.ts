@@ -1,17 +1,5 @@
-export enum SERVICES {
-  AUTH = 'AuthService',
-  USERS = 'UsersService',
-}
+export enum SERVICES {}
 
-export enum REPOSITORIES {
-  USERS = 'UsersRepository',
-}
+export enum REPOSITORIES {}
 
-export const ROUTES = {
-  AUTH: {
-    INDEX: 'auth',
-    LOGIN: 'login',
-    REGISTER: 'register',
-    STATUS: 'status',
-  },
-} as const;
+export const ROUTES = {} as const;
