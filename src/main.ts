@@ -6,9 +6,6 @@ import { ClerkExpressWithAuth } from '@clerk/clerk-sdk-node';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  app.enableCors({
-    origin: process.env.CORS_ORIGIN,
-  });
 
   const prismaService = app.get(PrismaService);
   await prismaService.enableShutdownHooks(app);
