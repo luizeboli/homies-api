@@ -3,9 +3,9 @@ declare global {
     interface ProcessEnv {
       NODE_ENV: 'development' | 'production' | 'test';
       PORT: string;
-      COOKIE_NAME: string;
-      COOKIE_SECRET: string;
       DATABASE_URL: string;
+      CLERK_JWT_PUBLIC_KEY: string;
+      CLERK_FRONTEND_API: string;
     }
   }
 }
