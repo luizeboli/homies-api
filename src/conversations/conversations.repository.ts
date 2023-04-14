@@ -13,15 +13,29 @@ export class ConversationsRepository implements IConversationsRepository {
   constructor(private readonly prisma: PrismaService) {}
 
   async create(data: ConversationCreateInput): Promise<Conversation> {
-    const { ownerId, usersIds } = data;
+    const { ownerUsername, usernames } = data;
+
+    const ownerConnectOrCreate = {
+      create: { username: ownerUsername },
+      where: {
+        username: ownerUsername,
+      },
+    };
+
+    const usernamesConnectOrCreate = usernames.map((username) => ({
+      create: { username },
+      where: {
+        username,
+      },
+    }));
+
     return this.prisma.conversation.create({
       data: {
-        ownerId,
+        owner: {
+          connectOrCreate: ownerConnectOrCreate,
+        },
         users: {
-          connect: [
-            { id: ownerId },
-            ...usersIds.map((userId) => ({ id: userId })),
-          ],
+          connectOrCreate: [ownerConnectOrCreate, ...usernamesConnectOrCreate],
         },
       },
       include: {
@@ -33,17 +47,17 @@ export class ConversationsRepository implements IConversationsRepository {
   private formatConversationsFindManyWhere(
     rawWhere: ConversationFindManyInput,
   ) {
-    const { ownerId, userId } = rawWhere;
+    const { ownerUsername, username } = rawWhere;
     const where: Prisma.ConversationWhereInput = {};
 
-    if (ownerId) {
-      where.ownerId = ownerId;
+    if (ownerUsername) {
+      where.ownerUsername = ownerUsername;
     }
 
-    if (userId) {
+    if (username) {
       where.users = {
         some: {
-          id: userId,
+          username,
         },
       };
     }

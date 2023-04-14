@@ -12,8 +12,11 @@ export class ConversationsService implements IConversationsService {
   ) {}
 
   create(data: ConversationCreateInput): Promise<Conversation> {
-    const sameUserId = data.usersIds.some((id) => id === data.ownerId);
-    if (sameUserId) {
+    const { usernames, ownerUsername } = data;
+    const sameUsername = usernames.some(
+      (username) => username === ownerUsername,
+    );
+    if (sameUsername) {
       throw new HttpException(
         'You cannot add yourself to the conversation',
         HttpStatus.BAD_REQUEST,
@@ -23,8 +26,8 @@ export class ConversationsService implements IConversationsService {
     return this.conversationsRepository.create(data);
   }
 
-  getConversations(userId: string): Promise<Conversation[]> {
-    return this.conversationsRepository.findMany({ userId });
+  getConversations(username: string): Promise<Conversation[]> {
+    return this.conversationsRepository.findMany({ username });
   }
 
   delete(id: string): void {

@@ -1,17 +1,14 @@
-import { User } from 'src/users/types';
-
 export type Conversation = {
   id: string;
-  users: User[];
-  ownerId: string;
+  ownerUsername: string;
 };
 
 export type ConversationFindManyInput = {
-  ownerId?: string;
-  userId?: string;
+  ownerUsername?: string;
+  username?: string;
 };
 
 export type ConversationCreateInput = {
-  ownerId: string;
-  usersIds: string[];
+  ownerUsername: string;
+  usernames: string[];
 };
