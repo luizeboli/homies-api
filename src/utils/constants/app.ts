@@ -1,5 +1,18 @@
-export enum SERVICES {}
+export enum SERVICES {
+  CONVERSATIONS = 'ConversationsService',
+  USERS = 'UsersService',
+}
 
-export enum REPOSITORIES {}
+export enum REPOSITORIES {
+  CONVERSATIONS = 'ConversationsRepository',
+  USERS = 'UsersRepository',
+}
 
-export const ROUTES = {} as const;
+export const ROUTES = {
+  CONVERSATIONS: {
+    INDEX: 'conversations',
+  },
+  WEBHOOK: {
+    INDEX: 'webhook',
+  },
+} as const;

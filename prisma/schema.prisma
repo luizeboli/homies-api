@@ -6,14 +6,27 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql"
-  url      = env("DATABASE_URL")
+  provider     = "mysql"
+  url          = env("DATABASE_URL")
   relationMode = "prisma"
 }
 
 model User {
-  id        String   @id @default(uuid())
-  username  String   @unique
-  password  String 
-  email     String   @unique
+  id String @id
+  username String
+
+  conversations      Conversation[]
+  ownerConversations Conversation[] @relation("ConversationOwner")
+
+  @@unique(id)
+  @@unique(username)
+}
+
+model Conversation {
+  id      String @id @default(uuid())
+  owner   User   @relation("ConversationOwner", fields: [ownerUserId], references: [id])
+  ownerUserId String
+  users   User[]
+
+  @@index([ownerUserId])
 }
