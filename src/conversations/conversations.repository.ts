@@ -31,11 +31,18 @@ export class ConversationsRepository implements IConversationsRepository {
   findByUserId(id: string): Promise<Conversation[]> {
     return this.prisma.conversation.findMany({
       where: {
-        users: {
-          some: {
-            id,
+        OR: [
+          {
+            users: {
+              some: {
+                id,
+              },
+            },
           },
-        },
+          {
+            ownerUserId: id,
+          },
+        ],
       },
       include: {
         users: true,
