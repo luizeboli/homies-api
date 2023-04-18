@@ -19,10 +19,7 @@ export class ConversationsRepository implements IConversationsRepository {
           },
         },
         users: {
-          connect: [
-            ...usernames.map((username) => ({ username })),
-            { username: ownerUsername },
-          ],
+          connect: usernames.map((username) => ({ username })),
         },
       },
       include: {
