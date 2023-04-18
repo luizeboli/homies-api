@@ -1,11 +1,6 @@
 export type Conversation = {
   id: string;
-  ownerUsername: string;
-};
-
-export type ConversationFindManyInput = {
-  ownerUsername?: string;
-  username?: string;
+  ownerUserId: string;
 };
 
 export type ConversationCreateInput = {

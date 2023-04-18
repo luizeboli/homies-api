@@ -13,10 +13,13 @@ datasource db {
 
 model User {
   id String @id
-  username String?
+  username String
 
   conversations      Conversation[]
   ownerConversations Conversation[] @relation("ConversationOwner")
+
+  @@unique(id)
+  @@unique(username)
 }
 
 model Conversation {

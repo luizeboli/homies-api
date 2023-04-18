@@ -2,11 +2,7 @@ import { Prisma } from '@prisma/client';
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { IConversationsRepository } from './interfaces/conversations-repository.interface';
-import {
-  Conversation,
-  ConversationCreateInput,
-  ConversationFindManyInput,
-} from './types';
+import { Conversation, ConversationCreateInput } from './types';
 
 @Injectable()
 export class ConversationsRepository implements IConversationsRepository {
@@ -15,27 +11,18 @@ export class ConversationsRepository implements IConversationsRepository {
   async create(data: ConversationCreateInput): Promise<Conversation> {
     const { ownerUsername, usernames } = data;
 
-    const ownerConnectOrCreate = {
-      create: { username: ownerUsername },
-      where: {
-        username: ownerUsername,
-      },
-    };
-
-    const usernamesConnectOrCreate = usernames.map((username) => ({
-      create: { username },
-      where: {
-        username,
-      },
-    }));
-
     return this.prisma.conversation.create({
       data: {
         owner: {
-          connectOrCreate: ownerConnectOrCreate,
+          connect: {
+            username: ownerUsername,
+          },
         },
         users: {
-          connectOrCreate: [ownerConnectOrCreate, ...usernamesConnectOrCreate],
+          connect: [
+            ...usernames.map((username) => ({ username })),
+            { username: ownerUsername },
+          ],
         },
       },
       include: {
@@ -44,32 +31,15 @@ export class ConversationsRepository implements IConversationsRepository {
     });
   }
 
-  private formatConversationsFindManyWhere(
-    rawWhere: ConversationFindManyInput,
-  ) {
-    const { ownerUsername, username } = rawWhere;
-    const where: Prisma.ConversationWhereInput = {};
-
-    if (ownerUsername) {
-      where.ownerUsername = ownerUsername;
-    }
-
-    if (username) {
-      where.users = {
-        some: {
-          username,
-        },
-      };
-    }
-
-    return where;
-  }
-
-  findMany(rawWhere: ConversationFindManyInput = {}): Promise<Conversation[]> {
-    const where = this.formatConversationsFindManyWhere(rawWhere);
-
+  findByUserId(id: string): Promise<Conversation[]> {
     return this.prisma.conversation.findMany({
-      where,
+      where: {
+        users: {
+          some: {
+            id,
+          },
+        },
+      },
       include: {
         users: true,
       },

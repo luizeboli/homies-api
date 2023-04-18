@@ -1,11 +1,7 @@
-import {
-  Conversation,
-  ConversationCreateInput,
-  ConversationFindManyInput,
-} from '../types';
+import { Conversation, ConversationCreateInput } from '../types';
 
 export interface IConversationsRepository {
-  findMany(where?: ConversationFindManyInput): Promise<Conversation[]>;
+  findByUserId(id: string): Promise<Conversation[]>;
   create(data: ConversationCreateInput): Promise<Conversation>;
   delete(id: string): Promise<void>;
 }

@@ -1,5 +1,5 @@
 import { IsArray, IsNotEmpty, IsString } from 'class-validator';
-import { UsersExist } from 'src/utils/validators/users-exists';
+import { UsersExist } from 'src/conversations/validators/users-exists';
 
 export class CreateConversationDto {
   @IsNotEmpty()

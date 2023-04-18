@@ -24,4 +24,22 @@ export class UsersRepository implements IUsersRepository {
       },
     });
   }
+
+  async findManyByUsername(usernames: string[]): Promise<User[]> {
+    return this.prisma.user.findMany({
+      where: {
+        username: {
+          in: usernames,
+        },
+      },
+    });
+  }
+
+  async findByUsername(username: string): Promise<User | null> {
+    return this.prisma.user.findUnique({
+      where: {
+        username,
+      },
+    });
+  }
 }

@@ -3,12 +3,15 @@ import { IConversationsService } from './interfaces/conversations-service.interf
 import { Conversation, ConversationCreateInput } from './types';
 import { REPOSITORIES } from 'src/utils/constants/app';
 import { IConversationsRepository } from './interfaces/conversations-repository.interface';
+import { IUsersRepository } from 'src/users/interface/users-repository.interface';
 
 @Injectable()
 export class ConversationsService implements IConversationsService {
   constructor(
     @Inject(REPOSITORIES.CONVERSATIONS)
     private readonly conversationsRepository: IConversationsRepository,
+    @Inject(REPOSITORIES.USERS)
+    private readonly usersRepository: IUsersRepository,
   ) {}
 
   create(data: ConversationCreateInput): Promise<Conversation> {
@@ -27,7 +30,7 @@ export class ConversationsService implements IConversationsService {
   }
 
   getConversations(username: string): Promise<Conversation[]> {
-    return this.conversationsRepository.findMany({ username });
+    return this.conversationsRepository.findByUserId(username);
   }
 
   delete(id: string): void {
