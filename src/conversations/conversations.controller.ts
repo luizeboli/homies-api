@@ -13,7 +13,7 @@ export class ConversationsController {
 
   @Get()
   getConversations(@AuthUser() user: TAuthUserOutput) {
-    return this.conversationsService.getConversations(user.username);
+    return this.conversationsService.getConversations(user.userId);
   }
 
   @Post()

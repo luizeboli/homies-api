@@ -29,8 +29,8 @@ export class ConversationsService implements IConversationsService {
     return this.conversationsRepository.create(data);
   }
 
-  getConversations(username: string): Promise<Conversation[]> {
-    return this.conversationsRepository.findByUserId(username);
+  getConversations(userId: string): Promise<Conversation[]> {
+    return this.conversationsRepository.findByUserId(userId);
   }
 
   delete(id: string): void {
