@@ -12,7 +12,8 @@ datasource db {
 }
 
 model User {
-  username String @id
+  id String @id
+  username String?
 
   conversations      Conversation[]
   ownerConversations Conversation[] @relation("ConversationOwner")
@@ -20,9 +21,9 @@ model User {
 
 model Conversation {
   id      String @id @default(uuid())
-  owner   User   @relation("ConversationOwner", fields: [ownerUsername], references: [username])
-  ownerUsername String
+  owner   User   @relation("ConversationOwner", fields: [ownerUserId], references: [id])
+  ownerUserId String
   users   User[]
 
-  @@index([ownerUsername])
+  @@index([ownerUserId])
 }

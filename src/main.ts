@@ -6,7 +6,9 @@ import { useContainer } from 'class-validator';
 import { ClerkExpressWithAuth } from '@clerk/clerk-sdk-node';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, {
+    rawBody: true,
+  });
 
   const prismaService = app.get(PrismaService);
   await prismaService.enableShutdownHooks(app);
