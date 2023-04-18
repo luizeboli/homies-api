@@ -23,6 +23,7 @@ export class ConversationsRepository implements IConversationsRepository {
       },
       include: {
         users: true,
+        owner: true,
       },
     });
   }
@@ -38,6 +39,7 @@ export class ConversationsRepository implements IConversationsRepository {
       },
       include: {
         users: true,
+        owner: true,
       },
     });
   }
