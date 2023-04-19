@@ -28,7 +28,7 @@ export class AuthenticatedSocketIoAdapter extends IoAdapter {
         await this.validateSession(__session);
         return callback(null, true);
       } catch (error) {
-        return callback(null, false);
+        return callback(error.message, false);
       }
     };
 
