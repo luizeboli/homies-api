@@ -1,4 +1,3 @@
-import { INestApplicationContext } from '@nestjs/common';
 import { IoAdapter } from '@nestjs/platform-socket.io';
 import { IncomingMessage } from 'http';
 import { ServerOptions } from 'socket.io';
@@ -6,10 +5,6 @@ import * as cookie from 'cookie';
 import jose from 'jose';
 
 export class AuthenticatedSocketIoAdapter extends IoAdapter {
-  constructor(private app: INestApplicationContext) {
-    super(app);
-  }
-
   private async validateSession(sessionCookie: string) {
     const splitPem = process.env.CLERK_JWT_PUBLIC_KEY.match(/.{1,64}/g);
     const spki =
