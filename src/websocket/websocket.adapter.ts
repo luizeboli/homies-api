@@ -12,11 +12,9 @@ export class AuthenticatedSocketIoAdapter extends IoAdapter {
       splitPem?.join('\n') +
       '\n-----END PUBLIC KEY-----';
 
-    try {
-      const alg = 'RS256';
-      const publicKey = await jose.importSPKI(spki, alg);
-      await jose.jwtVerify(sessionCookie, publicKey);
-    } catch (err) {}
+    const alg = 'RS256';
+    const publicKey = await jose.importSPKI(spki, alg);
+    await jose.jwtVerify(sessionCookie, publicKey);
   }
 
   createIOServer(port: number, options: ServerOptions) {
