@@ -8,6 +8,10 @@ export enum REPOSITORIES {
   USERS = 'UsersRepository',
 }
 
+export enum ETC {
+  WEBSOCKET_SESSION_MANAGER = 'WebsocketSessionManager',
+}
+
 export const ROUTES = {
   CONVERSATIONS: {
     INDEX: 'conversations',
