@@ -18,4 +18,8 @@ export class UsersService implements IUsersService {
 
     return this.usersRepository.create(data);
   }
+
+  async searchUsersStartsWith(username: string): Promise<User[]> {
+    return this.usersRepository.findByUsernameStartsWith(username);
+  }
 }

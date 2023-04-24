@@ -25,4 +25,8 @@ export const ROUTES = {
   WEBHOOK: {
     INDEX: 'webhook',
   },
+  USERS: {
+    INDEX: 'users',
+    SEARCH: 'search',
+  },
 } as const;

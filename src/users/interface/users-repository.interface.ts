@@ -5,4 +5,5 @@ export interface IUsersRepository {
   findById(id: string): Promise<User | null>;
   findByUsername(username: string): Promise<User | null>;
   findManyByUsername(usernames: string[]): Promise<User[]>;
+  findByUsernameStartsWith(username: string): Promise<User[]>;
 }

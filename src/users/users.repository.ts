@@ -42,4 +42,14 @@ export class UsersRepository implements IUsersRepository {
       },
     });
   }
+
+  async findByUsernameStartsWith(username: string): Promise<User[]> {
+    return this.prisma.user.findMany({
+      where: {
+        username: {
+          startsWith: username,
+        },
+      },
+    });
+  }
 }
