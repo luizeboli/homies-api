@@ -3,14 +3,15 @@ import {
   WebSocketGateway,
   WebSocketServer,
   OnGatewayConnection,
-  SubscribeMessage,
   OnGatewayDisconnect,
 } from '@nestjs/websockets';
-import { Server, Socket } from 'socket.io';
+import { Server } from 'socket.io';
 import { IAuthenticatedSocket } from './interfaces/authenticated-socket.interface';
-import { ETC } from 'src/utils/constants/app';
+import { ETC, EVENTS } from 'src/utils/constants/app';
 import { IWebsocketSessionManager } from './interfaces/websocket-session.interface';
 import { WebsocketAuthenticatedGuard } from './guards/authenticated.guard';
+import { OnEvent } from '@nestjs/event-emitter';
+import { Conversation } from 'src/conversations/types';
 
 @WebSocketGateway({
   cors: {
@@ -41,8 +42,15 @@ export class WebsocketGateway
     this.websocketSessionManager.removeSession(socket.user.id);
   }
 
-  @SubscribeMessage('onFelps')
-  handleMessage(client: Socket, payload: any) {
-    console.log(client.id, 'Message');
+  @OnEvent(EVENTS.CONVERSATION.CREATED)
+  handleConversationCreated(conversation: Conversation) {
+    const socketUsers = conversation.users.map((user) =>
+      this.websocketSessionManager.getSession(user.id),
+    );
+    socketUsers.forEach((socket) => {
+      if (socket) {
+        socket.emit(EVENTS.CONVERSATION.CREATED, conversation);
+      }
+    });
   }
 }
