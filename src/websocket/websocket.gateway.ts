@@ -1,4 +1,4 @@
-import { Inject, Injectable, NestMiddleware, UseGuards } from '@nestjs/common';
+import { Inject, UseGuards } from '@nestjs/common';
 import {
   WebSocketGateway,
   WebSocketServer,
