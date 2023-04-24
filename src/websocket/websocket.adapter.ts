@@ -1,37 +1,36 @@
+import { INestApplication } from '@nestjs/common';
 import { IoAdapter } from '@nestjs/platform-socket.io';
-import { IncomingMessage } from 'http';
-import { ServerOptions } from 'socket.io';
-import * as cookie from 'cookie';
-import jose from 'jose';
+import { Server, ServerOptions } from 'socket.io';
+import { ETC } from 'src/utils/constants/app';
+import { IWebsocketSessionManager } from './interfaces/websocket-session.interface';
+import { IAuthenticatedSocket } from './interfaces/authenticated-socket.interface';
 
 export class AuthenticatedSocketIoAdapter extends IoAdapter {
-  private async validateSession(sessionCookie: string) {
-    const splitPem = process.env.CLERK_JWT_PUBLIC_KEY.match(/.{1,64}/g);
-    const spki =
-      '-----BEGIN PUBLIC KEY-----\n' +
-      splitPem?.join('\n') +
-      '\n-----END PUBLIC KEY-----';
-
-    const alg = 'RS256';
-    const publicKey = await jose.importSPKI(spki, alg);
-    await jose.jwtVerify(sessionCookie, publicKey);
+  private websocketSessionManager: IWebsocketSessionManager;
+  constructor(app: INestApplication) {
+    super(app);
+    this.websocketSessionManager = app.get(ETC.WEBSOCKET_SESSION_MANAGER);
   }
 
   createIOServer(port: number, options: ServerOptions) {
-    options.allowRequest = async (req: IncomingMessage, callback) => {
-      if (!req.headers.cookie) return callback(null, false);
+    const server = super.createIOServer(port, options) as Server;
 
-      const { __session } = cookie.parse(req.headers.cookie);
-      if (!__session) return callback(null, false);
+    server.use(async (socket: IAuthenticatedSocket, next) => {
+      const cookies = socket.handshake.headers.cookie;
+      if (!cookies) return next(new Error('Unauthorized'));
 
       try {
-        await this.validateSession(__session);
-        return callback(null, true);
+        const { id, username } =
+          await this.websocketSessionManager.validateSession(cookies);
+        socket.user = {
+          id,
+          username,
+        };
+        return next();
       } catch (error) {
-        return callback(error.message, false);
+        return next(new Error('Unauthorized'));
       }
-    };
-
-    return super.createIOServer(port, options);
+    });
+    return server;
   }
 }
