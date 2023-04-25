@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Inject, Post } from '@nestjs/common';
+import { Body, Controller, Get, Inject, Param, Post } from '@nestjs/common';
 import { ROUTES, SERVICES } from 'src/utils/constants/app';
 import { IConversationsService } from './interfaces/conversations-service.interface';
 import { CreateConversationDto } from './dto/create-conversation.dto';
@@ -14,6 +14,17 @@ export class ConversationsController {
   @Get()
   getConversations(@AuthUser() user: TAuthUserOutput) {
     return this.conversationsService.getConversations(user.userId);
+  }
+
+  @Get(':conversationId')
+  getConversation(
+    @AuthUser() user: TAuthUserOutput,
+    @Param('conversationId') conversationId: string,
+  ) {
+    return this.conversationsService.getConversation(
+      conversationId,
+      user.userId,
+    );
   }
 
   @Post()
