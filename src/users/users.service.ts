@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { IUsersService } from './interface/users-service.interface';
-import { CreateUserInput, User } from './types';
+import { CreateUserInput, SearchUsersStartWithInput, User } from './types';
 import { REPOSITORIES } from 'src/utils/constants/app';
 import { IUsersRepository } from './interface/users-repository.interface';
 
@@ -17,5 +17,11 @@ export class UsersService implements IUsersService {
       throw new HttpException('User already exists', HttpStatus.CONFLICT);
 
     return this.usersRepository.create(data);
+  }
+
+  async searchUsersStartsWith(
+    data: SearchUsersStartWithInput,
+  ): Promise<User[]> {
+    return this.usersRepository.findByUsernameStartsWith(data);
   }
 }
