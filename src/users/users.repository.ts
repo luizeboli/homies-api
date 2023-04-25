@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { IUsersRepository } from './interface/users-repository.interface';
-import { CreateUserInput, User } from './types';
+import { CreateUserInput, SearchUsersStartWithInput, User } from './types';
 
 @Injectable()
 export class UsersRepository implements IUsersRepository {
@@ -43,11 +43,16 @@ export class UsersRepository implements IUsersRepository {
     });
   }
 
-  async findByUsernameStartsWith(username: string): Promise<User[]> {
+  async findByUsernameStartsWith(
+    data: SearchUsersStartWithInput,
+  ): Promise<User[]> {
+    const { username, includeSelf, user: authUser } = data;
+
     return this.prisma.user.findMany({
       where: {
         username: {
           startsWith: username,
+          not: includeSelf ? undefined : authUser.username,
         },
       },
     });
