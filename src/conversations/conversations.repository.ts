@@ -48,6 +48,9 @@ export class ConversationsRepository implements IConversationsRepository {
         users: true,
         owner: true,
       },
+      orderBy: {
+        createdAt: 'desc',
+      },
     });
   }
 

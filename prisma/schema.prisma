@@ -27,6 +27,7 @@ model Conversation {
   owner   User   @relation("ConversationOwner", fields: [ownerUserId], references: [id])
   ownerUserId String
   users   User[]
+  createdAt DateTime @default(now())
 
   @@index([ownerUserId])
 }
