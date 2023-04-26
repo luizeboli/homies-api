@@ -20,5 +20,11 @@ import { IsExistingUser } from './validators/users-exists';
     IsExistingUser,
   ],
   controllers: [ConversationsController],
+  exports: [
+    {
+      provide: REPOSITORIES.CONVERSATIONS,
+      useClass: ConversationsRepository,
+    },
+  ],
 })
 export class ConversationsModule {}

@@ -9,6 +9,7 @@ import { WebhookController } from './webhook/webhook.controller';
 import { WebhookModule } from './webhook/webhook.module';
 import { UsersModule } from './users/users.module';
 import { WebsocketModule } from './websocket/websocket.module';
+import { MessagesModule } from './messages/messages.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { WebsocketModule } from './websocket/websocket.module';
     UsersModule,
     WebhookModule,
     WebsocketModule,
+    MessagesModule,
   ],
   providers: [{ provide: APP_GUARD, useClass: AuthenticatedGuard }],
   controllers: [WebhookController],

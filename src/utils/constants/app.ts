@@ -1,11 +1,13 @@
 export enum SERVICES {
   CONVERSATIONS = 'ConversationsService',
   USERS = 'UsersService',
+  MESSAGES = 'MessagesService',
 }
 
 export enum REPOSITORIES {
   CONVERSATIONS = 'ConversationsRepository',
   USERS = 'UsersRepository',
+  MESSAGES = 'MessagesRepository',
 }
 
 export enum ETC {
@@ -15,6 +17,9 @@ export enum ETC {
 export const EVENTS = {
   CONVERSATION: {
     CREATED: 'conversation.created',
+  },
+  MESSAGE: {
+    CREATED: 'message.created',
   },
 } as const;
 
@@ -28,5 +33,8 @@ export const ROUTES = {
   USERS: {
     INDEX: 'users',
     SEARCH: 'search',
+  },
+  MESSAGES: {
+    INDEX: 'conversations/:conversationId/messages',
   },
 } as const;
