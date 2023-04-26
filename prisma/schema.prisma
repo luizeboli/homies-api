@@ -43,7 +43,7 @@ model Message {
   conversationId String
   author User @relation(fields: [authorId], references: [id])
   authorId String
-  content String
+  content String @db.VarChar(255)
   createdAt DateTime @default(now())
 
   @@index([conversationId])
