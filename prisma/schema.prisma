@@ -3,6 +3,7 @@
 
 generator client {
   provider = "prisma-client-js"
+  previewFeatures = ["extendedWhereUnique"]
 }
 
 datasource db {
@@ -27,6 +28,7 @@ model Conversation {
   owner   User   @relation("ConversationOwner", fields: [ownerUserId], references: [id])
   ownerUserId String
   users   User[]
+  createdAt DateTime @default(now())
 
   @@index([ownerUserId])
 }

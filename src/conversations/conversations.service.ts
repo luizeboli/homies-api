@@ -34,6 +34,22 @@ export class ConversationsService implements IConversationsService {
     return this.conversationsRepository.findByUserId(userId);
   }
 
+  async getConversation(
+    id: string,
+    userId: string,
+  ): Promise<Conversation | null> {
+    const conversation = await this.conversationsRepository.findUniqueById(
+      id,
+      userId,
+    );
+
+    if (!conversation) {
+      throw new HttpException('Conversation not found', HttpStatus.NOT_FOUND);
+    }
+
+    return conversation;
+  }
+
   delete(id: string): void {
     this.conversationsRepository.delete(id);
   }

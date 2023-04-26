@@ -48,6 +48,36 @@ export class ConversationsRepository implements IConversationsRepository {
         users: true,
         owner: true,
       },
+      orderBy: {
+        createdAt: 'desc',
+      },
+    });
+  }
+
+  async findUniqueById(
+    id: string,
+    userId: string,
+  ): Promise<Conversation | null> {
+    return this.prisma.conversation.findUnique({
+      where: {
+        id,
+        OR: [
+          {
+            ownerUserId: userId,
+          },
+          {
+            users: {
+              some: {
+                id: userId,
+              },
+            },
+          },
+        ],
+      },
+      include: {
+        users: true,
+        owner: true,
+      },
     });
   }
 
