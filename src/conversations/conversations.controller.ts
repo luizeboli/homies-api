@@ -1,4 +1,13 @@
-import { Body, Controller, Get, Inject, Param, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpException,
+  HttpStatus,
+  Inject,
+  Param,
+  Post,
+} from '@nestjs/common';
 import { ROUTES, SERVICES } from 'src/utils/constants/app';
 import { IConversationsService } from './interfaces/conversations-service.interface';
 import { CreateConversationDto } from './dto/create-conversation.dto';
@@ -18,11 +27,18 @@ export class ConversationsController {
   }
 
   @Get(':conversationId')
-  getConversation(
+  async getConversation(
     @AuthUser() user: User,
     @Param('conversationId') conversationId: string,
   ) {
-    return this.conversationsService.getConversation(conversationId, user.id);
+    const conversation = await this.conversationsService.getConversation(
+      conversationId,
+      user.id,
+    );
+    if (!conversation) {
+      throw new HttpException('Conversation not found', HttpStatus.NOT_FOUND);
+    }
+    return conversation;
   }
 
   @Post()

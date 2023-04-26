@@ -1,9 +1,10 @@
 import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { IConversationsService } from './interfaces/conversations-service.interface';
 import { Conversation, ConversationCreateInput } from './types';
-import { EVENTS, REPOSITORIES } from 'src/utils/constants/app';
+import { REPOSITORIES } from 'src/utils/constants/app';
 import { IConversationsRepository } from './interfaces/conversations-repository.interface';
 import { EventEmitter2 } from '@nestjs/event-emitter';
+import { EVENT_EMITTER_EVENTS } from 'src/utils/constants/event-emitter';
 
 @Injectable()
 export class ConversationsService implements IConversationsService {
@@ -26,7 +27,10 @@ export class ConversationsService implements IConversationsService {
     }
 
     const conversation = await this.conversationsRepository.create(data);
-    this.eventEmitter.emit(EVENTS.CONVERSATION.CREATED, conversation);
+    this.eventEmitter.emit(
+      EVENT_EMITTER_EVENTS.CONVERSATION.CREATED,
+      conversation,
+    );
     return conversation;
   }
 
@@ -34,20 +38,8 @@ export class ConversationsService implements IConversationsService {
     return this.conversationsRepository.findByUserId(userId);
   }
 
-  async getConversation(
-    id: string,
-    userId: string,
-  ): Promise<Conversation | null> {
-    const conversation = await this.conversationsRepository.findUniqueById(
-      id,
-      userId,
-    );
-
-    if (!conversation) {
-      throw new HttpException('Conversation not found', HttpStatus.NOT_FOUND);
-    }
-
-    return conversation;
+  getConversation(id: string, userId: string): Promise<Conversation | null> {
+    return this.conversationsRepository.findUniqueById(id, userId);
   }
 
   delete(id: string): void {

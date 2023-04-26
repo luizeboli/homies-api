@@ -25,6 +25,10 @@ import { IsExistingUser } from './validators/users-exists';
       provide: REPOSITORIES.CONVERSATIONS,
       useClass: ConversationsRepository,
     },
+    {
+      provide: SERVICES.CONVERSATIONS,
+      useClass: ConversationsService,
+    },
   ],
 })
 export class ConversationsModule {}
