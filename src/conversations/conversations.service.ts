@@ -1,6 +1,10 @@
 import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { IConversationsService } from './interfaces/conversations-service.interface';
-import { Conversation, ConversationCreateInput } from './types';
+import {
+  Conversation,
+  ConversationCreateInput,
+  FindUniqueByIdInclude,
+} from './types';
 import { REPOSITORIES } from 'src/utils/constants/app';
 import { IConversationsRepository } from './interfaces/conversations-repository.interface';
 import { EventEmitter2 } from '@nestjs/event-emitter';
@@ -38,8 +42,12 @@ export class ConversationsService implements IConversationsService {
     return this.conversationsRepository.findByUserId(userId);
   }
 
-  getConversation(id: string, userId: string): Promise<Conversation | null> {
-    return this.conversationsRepository.findUniqueById(id, userId);
+  getConversation(
+    id: string,
+    userId: string,
+    include?: FindUniqueByIdInclude,
+  ): Promise<Conversation | null> {
+    return this.conversationsRepository.findUniqueById(id, userId, include);
   }
 
   delete(id: string): void {

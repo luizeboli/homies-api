@@ -1,7 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { IConversationsRepository } from './interfaces/conversations-repository.interface';
-import { Conversation, ConversationCreateInput } from './types';
+import {
+  Conversation,
+  ConversationCreateInput,
+  FindUniqueByIdInclude,
+} from './types';
 
 @Injectable()
 export class ConversationsRepository implements IConversationsRepository {
@@ -57,6 +61,7 @@ export class ConversationsRepository implements IConversationsRepository {
   async findUniqueById(
     id: string,
     userId: string,
+    include?: FindUniqueByIdInclude,
   ): Promise<Conversation | null> {
     return this.prisma.conversation.findUnique({
       where: {
@@ -77,6 +82,12 @@ export class ConversationsRepository implements IConversationsRepository {
       include: {
         users: true,
         owner: true,
+        messages: include?.messages && {
+          take: 50,
+          orderBy: {
+            createdAt: 'desc',
+          },
+        },
       },
     });
   }

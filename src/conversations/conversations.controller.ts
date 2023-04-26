@@ -6,7 +6,9 @@ import {
   HttpStatus,
   Inject,
   Param,
+  ParseBoolPipe,
   Post,
+  Query,
 } from '@nestjs/common';
 import { ROUTES, SERVICES } from 'src/utils/constants/app';
 import { IConversationsService } from './interfaces/conversations-service.interface';
@@ -30,10 +32,12 @@ export class ConversationsController {
   async getConversation(
     @AuthUser() user: User,
     @Param('conversationId') conversationId: string,
+    @Query('messages', ParseBoolPipe) messages: boolean,
   ) {
     const conversation = await this.conversationsService.getConversation(
       conversationId,
       user.id,
+      { messages },
     );
     if (!conversation) {
       throw new HttpException('Conversation not found', HttpStatus.NOT_FOUND);
