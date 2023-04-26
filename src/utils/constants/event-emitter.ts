@@ -1,9 +1,8 @@
-export const WEBSOCKET_EVENTS = {
+export const EVENT_EMITTER_EVENTS = {
   CONVERSATION: {
     CREATED: 'conversation.created',
-    JOINED: 'conversation.joined',
   },
   MESSAGE: {
     CREATED: 'message.created',
   },
-};
+} as const;

@@ -16,6 +16,8 @@ import { IWebsocketSessionManager } from './interfaces/websocket-session.interfa
 import { WebsocketAuthenticatedGuard } from './guards/authenticated.guard';
 import { OnEvent } from '@nestjs/event-emitter';
 import { Conversation } from 'src/conversations/types';
+import { Message } from 'src/messages/entities/message.entity';
+import { EVENT_EMITTER_EVENTS } from 'src/utils/constants/event-emitter';
 import { WEBSOCKET_EVENTS } from 'src/utils/constants/websocket';
 import { IConversationsService } from 'src/conversations/interfaces/conversations-service.interface';
 
@@ -66,14 +68,28 @@ export class WebsocketGateway
 
     socket.join(`conversation-${conversationId}`);
   }
+
+  @OnEvent(EVENT_EMITTER_EVENTS.CONVERSATION.CREATED)
   handleConversationCreated(conversation: Conversation) {
     const socketUsers = conversation.users.map((user) =>
       this.websocketSessionManager.getSession(user.id),
     );
     socketUsers.forEach((socket) => {
       if (socket) {
-        socket.emit(EVENTS.CONVERSATION.CREATED, conversation);
+        socket.emit(WEBSOCKET_EVENTS.CONVERSATION.CREATED, conversation);
       }
     });
+  }
+
+  @OnEvent(EVENT_EMITTER_EVENTS.MESSAGE.CREATED)
+  handleMessageCreated(message: Message) {
+    const { conversationId } = message;
+    const roomName = `conversation-${conversationId}`;
+    const { rooms } = this.server.sockets.adapter;
+
+    const socketsInConversation = rooms.get(roomName);
+    if (!socketsInConversation?.size) return;
+
+    this.server.to(roomName).emit(WEBSOCKET_EVENTS.MESSAGE.CREATED, message);
   }
 }
