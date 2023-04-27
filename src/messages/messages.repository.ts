@@ -20,6 +20,9 @@ export class MessagesRepository implements IMessagesRepository {
         conversationId,
         authorId: userId,
       },
+      include: {
+        author: true,
+      },
     });
   }
 
@@ -29,6 +32,9 @@ export class MessagesRepository implements IMessagesRepository {
     return this.prisma.message.findMany({
       where: {
         conversationId,
+      },
+      include: {
+        author: true,
       },
       take,
       skip: cursor ? 1 : 0,
