@@ -2,7 +2,7 @@ import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { IMessagesService } from './interfaces/messages-service.interface';
 import { REPOSITORIES } from 'src/utils/constants/app';
 import { IMessagesRepository } from './interfaces/messages-repository.interface';
-import { MessageCreateInput } from './types';
+import { MessageCreateInput, MessageFindInput } from './types';
 import { IConversationsRepository } from 'src/conversations/interfaces/conversations-repository.interface';
 import { Message } from './entities/message.entity';
 import { EventEmitter2 } from '@nestjs/event-emitter';
@@ -33,5 +33,20 @@ export class MessagesService implements IMessagesService {
     const message = await this.messagesRepository.create(input);
     this.eventEmitter.emit(EVENT_EMITTER_EVENTS.MESSAGE.CREATED, message);
     return message;
+  }
+
+  async find(data: MessageFindInput): Promise<Message[]> {
+    const { conversationId, userId } = data;
+
+    const conversation = await this.conversationsRepository.findUniqueById(
+      conversationId,
+      userId,
+    );
+
+    if (!conversation) {
+      throw new HttpException('Conversation not found', HttpStatus.NOT_FOUND);
+    }
+
+    return this.messagesRepository.find(data);
   }
 }

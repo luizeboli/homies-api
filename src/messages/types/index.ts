@@ -5,3 +5,10 @@ export type MessageCreateInput = {
   conversationId: string;
   userId: string;
 };
+
+export type MessageFindInput = {
+  conversationId: string;
+  userId: string;
+  take: number;
+  cursor?: string;
+};

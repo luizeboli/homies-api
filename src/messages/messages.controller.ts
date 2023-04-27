@@ -1,4 +1,13 @@
-import { Body, Controller, Inject, Param, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Inject,
+  Param,
+  ParseIntPipe,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { CreateMessageDto } from './dto/create-message.dto';
 import { ROUTES, SERVICES } from 'src/utils/constants/app';
 import { IMessagesService } from './interfaces/messages-service.interface';
@@ -19,5 +28,20 @@ export class MessagesController {
     @AuthUser() { id }: User,
   ) {
     return this.messagesService.create({ conversationId, data, userId: id });
+  }
+
+  @Get()
+  find(
+    @Param('conversationId') conversationId: string,
+    @AuthUser() { id }: User,
+    @Query('take', ParseIntPipe) take: number,
+    @Query('cursor') cursor?: string,
+  ) {
+    return this.messagesService.find({
+      conversationId,
+      userId: id,
+      take: take,
+      cursor,
+    });
   }
 }

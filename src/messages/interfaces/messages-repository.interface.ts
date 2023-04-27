@@ -1,6 +1,7 @@
 import { Message } from '../entities/message.entity';
-import { MessageCreateInput } from '../types';
+import { MessageCreateInput, MessageFindInput } from '../types';
 
 export interface IMessagesRepository {
   create(data: MessageCreateInput): Promise<Message>;
+  find(data: MessageFindInput): Promise<Message[]>;
 }
