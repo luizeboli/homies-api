@@ -24,12 +24,11 @@ export class MessagesRepository implements IMessagesRepository {
   }
 
   find(data: MessageFindInput): Promise<Message[]> {
-    const { conversationId, userId, cursor, take } = data;
+    const { conversationId, cursor, take } = data;
 
     return this.prisma.message.findMany({
       where: {
         conversationId,
-        authorId: userId,
       },
       take,
       skip: cursor ? 1 : 0,
