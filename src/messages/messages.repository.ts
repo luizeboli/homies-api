@@ -43,6 +43,9 @@ export class MessagesRepository implements IMessagesRepository {
             id: cursor,
           }
         : undefined,
+      orderBy: {
+        createdAt: 'asc',
+      },
     });
   }
 }
